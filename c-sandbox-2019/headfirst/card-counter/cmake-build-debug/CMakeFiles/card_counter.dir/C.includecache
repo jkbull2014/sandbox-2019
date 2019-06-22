@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/georger/dev/sandbox/2019/c-sandbox-2019/headfirst/card-counter/main.c
+stdio.h
+-
+stdlib.h
+-
+ctype.h
+-
+
