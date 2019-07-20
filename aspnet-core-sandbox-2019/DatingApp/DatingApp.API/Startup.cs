@@ -32,7 +32,21 @@ namespace DatingApp.API
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddCors();
+            //services.AddCors();
+            /*
+                I updated the Cors service to specify a policy here and use it in the Configure() method since I was getting this error when first testing 
+                login:
+                    Access to XMLHttpRequest at 'http://localhost:5000/api/auth/login' from origin 'http://localhost:4200' has been blocked by CORS policy: Request header field content-type is not allowed by Access-Control-Allow-Headers in preflight response.
+                help from:
+                    https://www.udemy.com/build-an-app-with-aspnet-core-and-angular-from-scratch/learn/lecture/8707596#questions/6809566
+             */
+            services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
@@ -60,7 +74,8 @@ namespace DatingApp.API
             }
 
             // app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseMvc();
         }
